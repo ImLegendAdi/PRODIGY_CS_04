@@ -45,9 +45,10 @@ It’s designed for **cybersecurity research, ethical hacking training, and digi
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/Python-Keylogger.git
-cd Python-Keylogger
-
+git clone https://github.com/ImLegendAdi/PRODIGY_CS_04.git
+cd <repo>
+python3 server.py
+python3 client.py
 ```
 
 

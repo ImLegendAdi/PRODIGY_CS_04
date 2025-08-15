@@ -38,9 +38,6 @@ It’s designed for **cybersecurity research, ethical hacking training, and digi
 
 ---
 
-
----
-
 ## 🛠 Installation & Setup
 
 ### 1️⃣ Clone the Repository

